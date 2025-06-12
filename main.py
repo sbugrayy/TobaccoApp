@@ -1,7 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QRadioButton, QWidget, QScrollArea, QGridLayout, QFrame, QCompleter
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QRadioButton, QWidget, QScrollArea, QGridLayout, QFrame, QCompleter, QButtonGroup, QDialogButtonBox, QMessageBox
 from PyQt5.QtCore import Qt, QStringListModel
-from PyQt5.QtGui import QMouseEvent, QCursor
+from PyQt5.QtGui import QMouseEvent, QCursor, QDoubleValidator
 import json
 import os
 
@@ -26,21 +26,34 @@ class ProductCard(QFrame):
         self.layout.setContentsMargins(10, 10, 10, 10)
         self.layout.setSpacing(5)
 
+        # Ürün adı için özel stil
         self.name_label = QLabel(product_data["name"])
         self.name_label.setObjectName("ProductName")
+        self.name_label.setWordWrap(True)  # Kelime kaydırma
+        self.name_label.setAlignment(Qt.AlignCenter)  # Ortalama
         self.layout.addWidget(self.name_label)
 
         self.price_label = QLabel(f"{product_data['price']:.2f} TL")
         self.price_label.setObjectName("ProductPrice")
+        self.price_label.setAlignment(Qt.AlignCenter)  # Ortalama
         self.layout.addWidget(self.price_label)
 
+        # Kiloluk satış durumu için emoji kullanımı
         if product_data.get("is_kg_sold", False):
-            self.kg_label = QLabel("Kiloluk Satış: Evet")
+            self.kg_label = QLabel("✅ Kiloluk Satış")
             self.kg_label.setObjectName("ProductKgStatus")
+            self.kg_label.setStyleSheet("color: #2ecc71;")  # Yeşil renk
         else:
-            self.kg_label = QLabel("Kiloluk Satış: Hayır")
+            self.kg_label = QLabel("❌ Kiloluk Satış")
             self.kg_label.setObjectName("ProductKgStatus")
+            self.kg_label.setStyleSheet("color: #e74c3c;")  # Kırmızı renk
+        self.kg_label.setAlignment(Qt.AlignCenter)  # Ortalama
         self.layout.addWidget(self.kg_label)
+
+        # Silme butonu ekle
+        self.delete_button = QPushButton("Sil")
+        self.delete_button.setObjectName("DeleteButton")
+        self.layout.addWidget(self.delete_button)
 
         self.layout.addStretch() # İçerik dikeyde yukarı hizalanır
 
@@ -74,11 +87,11 @@ class AddProductDialog(QDialog):
 
         self.price_label = QLabel("Fiyat (TL):")
         self.price_input = QLineEdit()
-        self.price_input.setValidator(QtGui.QDoubleValidator(0.0, 999999.0, 2)) # Sadece ondalıklı sayı girişi
+        self.price_input.setValidator(QDoubleValidator(0.0, 999999.0, 2)) # Sadece ondalıklı sayı girişi
         self.form_layout.addWidget(self.price_label, 1, 0)
         self.form_layout.addWidget(self.price_input, 1, 1)
 
-        self.kg_radio_group = QtWidgets.QButtonGroup(self)
+        self.kg_radio_group = QButtonGroup(self)
         self.is_kg_sold_label = QLabel("Kiloluk Satılıyor mu?")
         self.yes_radio = QRadioButton("Evet")
         self.no_radio = QRadioButton("Hayır")
@@ -95,7 +108,7 @@ class AddProductDialog(QDialog):
 
         self.main_layout.addStretch()
 
-        self.button_box = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
+        self.button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.button_box.accepted.connect(self.accept)
         self.button_box.rejected.connect(self.reject)
         self.main_layout.addWidget(self.button_box)
@@ -136,7 +149,7 @@ class KgCalculatorDialog(QDialog):
 
         self.input_field = QLineEdit()
         self.input_field.setPlaceholderText("Değer Girin...")
-        self.input_field.setValidator(QtGui.QDoubleValidator(0.0, 999999.0, 2))
+        self.input_field.setValidator(QDoubleValidator(0.0, 999999.0, 2))
         self.input_field.textChanged.connect(self.calculate_result)
         self.input_field.setObjectName("KgCalculatorInput")
         self.input_layout.addWidget(self.input_field)
@@ -216,7 +229,9 @@ class TobaccoApp(QMainWindow, Ui_MainWindow):
             card = ProductCard(product)
             self.product_grid_layout.addWidget(card, row, col)
             if product.get("is_kg_sold", False):
-                card.mousePressEvent = lambda event, p=product: self.open_kg_calculator(event, p) # Mouse click event ekle
+                card.mousePressEvent = lambda event, p=product: self.open_kg_calculator(event, p)
+            # Silme butonuna tıklama olayını bağla
+            card.delete_button.clicked.connect(lambda checked, p=product: self.delete_product(p))
             col += 1
             if col >= 4: # Her satırda 4 kart
                 col = 0
@@ -264,6 +279,16 @@ class TobaccoApp(QMainWindow, Ui_MainWindow):
         # Layout'u güncelle
         self.product_grid_layout.update()
 
+    def delete_product(self, product_data):
+        reply = QMessageBox.question(self, 'Ürün Silme',
+                                   f"{product_data['name']} ürününü silmek istediğinizden emin misiniz?",
+                                   QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        
+        if reply == QMessageBox.Yes:
+            self.product_manager.delete_product(product_data["name"])
+            self.load_products()  # Ürünleri yeniden yükle
+            self.setup_autocomplete()  # Arama çubuğunu güncelle
+            QMessageBox.information(self, 'Başarılı', 'Ürün başarıyla silindi.')
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

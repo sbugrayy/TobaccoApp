@@ -15,3 +15,9 @@ class ProductManager:
         product_data["id"] = new_id
         products.append(product_data)
         return self.db_manager.write_data(products)
+
+    def delete_product(self, product_name):
+        """Ürünü ismine göre siler."""
+        products = self.db_manager.read_data()
+        products = [p for p in products if p["name"] != product_name]
+        return self.db_manager.write_data(products)

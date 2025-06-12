@@ -1,10 +1,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from src.earnings_calculator import EarningsCalculator
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1000, 700) # Pencere boyutu
         MainWindow.setStyleSheet("background-color: #f0f0f0;") # Genel arka plan rengi
+        
+        # Pencere ikonu ayarlama
+        icon = QtGui.QIcon("assets/images/tobacco_logo.svg")
+        MainWindow.setWindowIcon(icon)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -34,6 +39,10 @@ class Ui_MainWindow(object):
         self.header_layout.addWidget(self.add_product_button)
         self.main_layout.addWidget(self.header_frame)
 
+        # Kazanç Hesaplayıcı
+        self.earnings_calculator = EarningsCalculator(self.centralwidget)
+        self.main_layout.addWidget(self.earnings_calculator.get_frame())
+
         # Ürün Görüntüleme Alanı
         self.scroll_area = QtWidgets.QScrollArea(self.centralwidget)
         self.scroll_area.setWidgetResizable(True)
@@ -53,4 +62,4 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Tütün Fiyat Uygulaması"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "TobaccoApp"))

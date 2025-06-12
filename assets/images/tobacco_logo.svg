@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Arka plan daire -->
+    <circle cx="256" cy="256" r="240" fill="#f8f9fa" stroke="#007bff" stroke-width="8"/>
+    
+    <!-- Sol tütün yaprağı -->
+    <path d="M80 256C80 256 160 140 240 180C320 220 280 380 200 380C120 380 80 256 80 256Z" 
+          fill="#2ecc71" stroke="#27ae60" stroke-width="4"/>
+    <path d="M200 180L200 380" stroke="#27ae60" stroke-width="3" stroke-linecap="round"/>
+    <path d="M140 260L260 300" stroke="#27ae60" stroke-width="3" stroke-linecap="round"/>
+    <path d="M260 260L140 300" stroke="#27ae60" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Orta tütün yaprağı -->
+    <path d="M256 80C256 80 336 140 336 240C336 340 256 400 256 400C256 400 176 340 176 240C176 140 256 80 256 80Z" 
+          fill="#2ecc71" stroke="#27ae60" stroke-width="4"/>
+    <path d="M256 140L256 400" stroke="#27ae60" stroke-width="3" stroke-linecap="round"/>
+    <path d="M196 220L316 260" stroke="#27ae60" stroke-width="3" stroke-linecap="round"/>
+    <path d="M316 220L196 260" stroke="#27ae60" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Sağ tütün yaprağı -->
+    <path d="M432 256C432 256 352 140 272 180C192 220 232 380 312 380C392 380 432 256 432 256Z" 
+          fill="#2ecc71" stroke="#27ae60" stroke-width="4"/>
+    <path d="M312 180L312 380" stroke="#27ae60" stroke-width="3" stroke-linecap="round"/>
+    <path d="M372 260L252 300" stroke="#27ae60" stroke-width="3" stroke-linecap="round"/>
+    <path d="M252 260L372 300" stroke="#27ae60" stroke-width="3" stroke-linecap="round"/>
+</svg> 
