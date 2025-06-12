@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Marlboro Red",
+    "price": 60.00,
+    "is_kg_sold": false
+  },
+  {
+    "id": 2,
+    "name": "Adıyaman Tütünü (kg)",
+    "price": 250.00,
+    "is_kg_sold": true
+  },
+  {
+    "id": 3,
+    "name": "Tekel 2000",
+    "price": 55.00,
+    "is_kg_sold": false
+  },
+  {
+    "id": 4,
+    "name": "Çelikhan Tütünü (kg)",
+    "price": 280.00,
+    "is_kg_sold": true
+  }
+]
