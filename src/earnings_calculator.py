@@ -39,6 +39,12 @@ class EarningsCalculator:
         self.show_daily_total_button.setText("Günlük Toplamı Göster")
         self.show_daily_total_button.setObjectName("show_daily_total_button")
         self.earnings_layout.addWidget(self.show_daily_total_button)
+
+        # Aylık Toplam Butonu
+        self.show_monthly_total_button = QtWidgets.QPushButton(self.earnings_frame)
+        self.show_monthly_total_button.setText("Aylık Toplamı Göster")
+        self.show_monthly_total_button.setObjectName("show_daily_total_button")
+        self.earnings_layout.addWidget(self.show_monthly_total_button)
         
         # Verileri Sıfırlama Butonu
         self.reset_earnings_button = QtWidgets.QPushButton(self.earnings_frame)
@@ -60,9 +66,16 @@ class EarningsCalculator:
         self.daily_total_label.setObjectName("daily_total_label")
         self.earnings_layout.addWidget(self.daily_total_label)
 
+        # Aylık Toplam Label
+        self.monthly_total_label = QtWidgets.QLabel(self.earnings_frame)
+        self.monthly_total_label.setText("Aylık Toplam: --.-- TL")
+        self.monthly_total_label.setObjectName("daily_total_label")
+        self.earnings_layout.addWidget(self.monthly_total_label)
+
     def connect_signals(self):
         self.add_earnings_button.clicked.connect(self.add_earnings)
         self.show_daily_total_button.clicked.connect(self.show_daily_total)
+        self.show_monthly_total_button.clicked.connect(self.show_monthly_total)
         self.reset_earnings_button.clicked.connect(self.reset_earnings)
 
     def add_earnings(self):
@@ -104,6 +117,23 @@ class EarningsCalculator:
             
             self.daily_total_label.setText(f"Günlük Toplam: {total:.2f} TL")
             
+        except Exception as e:
+            QtWidgets.QMessageBox.warning(None, "Hata", f"Toplam hesaplanırken bir hata oluştu: {str(e)}")
+
+    def show_monthly_total(self):
+        try:
+            month = datetime.now().strftime("%Y-%m")
+            total = 0.0
+
+            with open("data/daily_earnings.json", "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+            for earning in data["earnings"]:
+                if earning["date"].startswith(month):
+                    total += earning["amount"]
+
+            self.monthly_total_label.setText(f"Aylık Toplam: {total:.2f} TL")
+
         except Exception as e:
             QtWidgets.QMessageBox.warning(None, "Hata", f"Toplam hesaplanırken bir hata oluştu: {str(e)}")
 
