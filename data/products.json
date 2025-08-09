@@ -1,32 +1,8 @@
 [
   {
     "id": 1,
-    "name": "Marlboro Red",
-    "price": 60.0,
+    "name": "Marlboro",
+    "price": 100.0,
     "is_kg_sold": false
-  },
-  {
-    "id": 2,
-    "name": "Adıyaman Tütünü (kg)",
-    "price": 250.0,
-    "is_kg_sold": true
-  },
-  {
-    "id": 3,
-    "name": "Tekel 2000",
-    "price": 55.0,
-    "is_kg_sold": false
-  },
-  {
-    "name": "Kral",
-    "price": 1200.0,
-    "is_kg_sold": true,
-    "id": 5
-  },
-  {
-    "name": "Sert",
-    "price": 1000.0,
-    "is_kg_sold": true,
-    "id": 6
   }
 ]
